@@ -11,8 +11,5 @@
 */
 
 MAS konyha {
-
-    infrastructure: Local
-
-    agents: sample_agent;
+    agents: szakacs; futar;
 }
