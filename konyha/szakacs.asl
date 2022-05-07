@@ -17,9 +17,9 @@
 !check_tired. // initial goal: verify whether I am getting tired
 
 //ha penzt akarok szerezni szólni kell a kuktanak, hogy erje el,
-//hogy legyen alapanyag
-+!get(money) : true <- .send(kukta, achieve, has(szakacs, alapanyag)).
-//ha van szakacsnak alapanyaga akkor fozzon kajat
-+has(szakacs, alapanyag) : true <- !cook(food).
-//??? ha nincs alapanyag szolj hogy miiii?????
--has(szakacs, alapanyag): true <- !get(money).
+//hogy legyen elokeszitett_kaja
++!get(money) : true <- .send(kukta, achieve, has(szakacs, elokeszitett_kaja)).
+//ha van szakacsnak elokeszitett_kaja akkor fozzon kajat
++has(szakacs, elokeszitett_kaja) : true <- !cook(kesz_kaja).
+//??? ha nincs 
+-has(szakacs, elokeszitett_kaja): true <- !get(money).
