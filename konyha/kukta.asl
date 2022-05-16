@@ -4,18 +4,22 @@
 available(nyersanyag,fridge).
 
 /* Plans */
-+!has(szakacs,elokeszitett_kaja) 
-			: available(nyersanyag, fridge)
+//Ha azt a parancsot kapja hogy legyen a szakacsnak 
+//elokeszitett kajaja & van nyersanyag hutoben
++!has(szakacs,elokeszitett_kaja) : available(nyersanyag, fridge)
 		<-	!at(kukta, fridge);
 			open(fridge);
 			get(food);
 			close(fridge);
 			prepare(nyersanyag);
 			!at(kukta, szakacs);
-			hand_in(nyersanyag);//na itt ezt nem tudom, lehet elokeszitett_kaja kell neki
-			?has(szakacs, nyersanyag).
-+!has(szakacs, elokeszitett_kaja)
-			: not available(nyersanyag, fridge)
+			hand_in(elokeszitett_kaja);//na itt ezt nem tudom, lehet elokeszitett_kaja kell neki
+			?has(szakacs, nyersanyag);
+			print("KUKTA: elvegeztem a feladatomat - elokeszitettem, mert volt a hutoben").
+//HA azt a parancsot kaptam szakacstol hog ker elokeszitett kajat
+//viszont nincs nyersanyag akkor
++!has(szakacs, elokeszitett_kaja): not available(nyersanyag, fridge)
 		<- .send(futar, achieve, get(nyersanyag, 5));
-			!at(kukta, fridge).
+			!at(kukta, fridge);
+			.print("\n\n\nSzakas szol futarnak hozzon nyersanyagot").
 
