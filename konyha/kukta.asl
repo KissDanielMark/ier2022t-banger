@@ -22,5 +22,16 @@ available(etel,fridge).
 			!at(kukta, fridge).
 
 +!at(kukta, P): at(kukta,P) <- true.
-+!at(robot,P):not at(kukta, P) <- move_towards(P);
+
++!at(kukta,P):not at(kukta, P) <- move_towards(P);
 								!at(kukta,P).
+								
+
+// when the fridge is opened, the beer stock is perceived
+// and thus the available belief is updated
++stock(etel,0)
+   :  available(etel,fridge)
+   <- -available(etel,fridge).
++stock(etel,N)
+   :  N > 0 & not available(etel,fridge)
+   <- -+available(etel,fridge).

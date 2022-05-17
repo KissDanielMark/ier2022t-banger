@@ -57,7 +57,7 @@ public class HouseEnv extends Environment {
 
         // add beer "status" the percepts
         if (model.fridgeOpen) {
-            addPercept("kukta", Literal.parseLiteral("stock(beer,"+model.availableBeers+")"));
+            addPercept("kukta", Literal.parseLiteral("stock(etel,"+model.availableBeers+")"));
         }
         if (model.sipCount > -1) //(model.sipCount > 0)
         {
@@ -144,7 +144,7 @@ public class HouseEnv extends Environment {
         {
             updatePercepts();
             try {
-                Thread.sleep(10000);
+                Thread.sleep(1000);
             } catch (Exception e) {}
         }
         return result;
