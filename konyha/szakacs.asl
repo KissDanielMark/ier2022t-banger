@@ -6,8 +6,7 @@
 //ha penzt akarok szerezni szólni kell a kuktanak, hogy erje el,
 //hogy legyen elokeszitett_kaja
 +!get(etel) : true 
-	<- .send(kukta, achieve, has(szakacs, etel));
-		print("szakacsnak etel kell, szolt a kuktanak").
+	<- .send(kukta, achieve, has(szakacs, etel)).
 	
 	
 //ha van szakacsnak elokeszitett_kaja akkor fozzon kajat

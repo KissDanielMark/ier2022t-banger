@@ -110,4 +110,10 @@ public class HouseModel extends GridWorldModel {
             return false;
         }
     }
+
+    boolean cookFood()
+    {
+        System.out.println("Szopj ki buzi");
+        return true;
+    }
 }
