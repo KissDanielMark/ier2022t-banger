@@ -8,5 +8,6 @@
 */
 
 MAS konyha {
+	environment: HouseEnv(gui)
     agents: szakacs; kukta; futar;
 }
