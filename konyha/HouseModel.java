@@ -70,7 +70,8 @@ public class HouseModel extends GridWorldModel {
     }
 
     boolean getBeer() {
-        if (fridgeOpen && availableBeers > 0 && !carryingBeer) {
+        if (fridgeOpen && availableBeers > 0 && !carryingBeer) 
+        {
             availableBeers--;
             carryingBeer = true;
             if (view != null)
@@ -113,7 +114,13 @@ public class HouseModel extends GridWorldModel {
 
     boolean cookFood()
     {
-        System.out.println("Szopj ki buzi");
+        System.out.println("Szopj ki buzi - cook");
+        return true;
+    }
+
+    boolean prepareFood()
+    {
+        System.out.println("Szopj ki buzi - prepare");
         return true;
     }
 }

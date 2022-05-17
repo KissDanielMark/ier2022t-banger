@@ -10,9 +10,11 @@ public class HouseEnv extends Environment {
     public static final Literal closeFridgeParancs = Literal.parseLiteral("close(fridge)");
     public static final Literal getEtelParancs  = Literal.parseLiteral("get(etel)");
     public static final Literal handInEtelParancs  = Literal.parseLiteral("hand_in(etel)");
-    public static final Literal sb  = Literal.parseLiteral("sip(beer)");
+    public static final Literal sipEtelParancs  = Literal.parseLiteral("sip(etel)");
     public static final Literal hasSzakacsEtelParancs = Literal.parseLiteral("has(szakacs,etel)");
+
     public static final Literal cookEtelParancs = Literal.parseLiteral("cook(etel)");
+    public static final Literal prepareEtelParancs = Literal.parseLiteral("prepare(etel)");
 
     public static final Literal atFridgeParancs = Literal.parseLiteral("at(kukta,fridge)");
     public static final Literal ao = Literal.parseLiteral("at(kukta,szakacs)");
@@ -59,7 +61,7 @@ public class HouseEnv extends Environment {
         if (model.fridgeOpen) {
             addPercept("kukta", Literal.parseLiteral("stock(etel,"+model.availableBeers+")"));
         }
-        if (model.sipCount > -1) //(model.sipCount > 0)
+        if (model.sipCount > 0) //(model.sipCount > 0)
         {
             addPercept("kukta", hasSzakacsEtelParancs);
             addPercept("szakacs", hasSzakacsEtelParancs);
@@ -70,7 +72,7 @@ public class HouseEnv extends Environment {
     
     @Override
     public boolean executeAction(String ag, Structure action) {
-        System.out.println("\n\n\n\n["+ag+"] doing: "+action);
+        System.out.println("\n["+ag+"] doing: "+action+"\n");
         boolean result = false;
         if (action.equals(openFridgeParancs)) 
         { // openFridgeParancs = open(fridge)
@@ -107,11 +109,13 @@ public class HouseEnv extends Environment {
         } 
         else if (action.equals(handInEtelParancs)) 
         {
+            System.out.println("KAJAATADAS PARANCS FUT");
             result = model.handInBeer();
 
         } 
-        else if (action.equals(sb)) 
+        else if (action.equals(sipEtelParancs)) 
         {
+            System.out.println("CSINALJ VELE VALAMIT BUZI SZAKACS");
             result = model.sipBeer();
 
         } 
@@ -120,6 +124,13 @@ public class HouseEnv extends Environment {
         {
             System.out.println("Cook kaja parancs!!!");
             result = model.cookFood();
+
+        } 
+
+        else if (action.equals(prepareEtelParancs)) 
+        {
+            System.out.println("Prepare kaja parancs!!!");
+            result = model.prepareFood();
 
         } 
 
@@ -144,7 +155,7 @@ public class HouseEnv extends Environment {
         {
             updatePercepts();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (Exception e) {}
         }
         return result;

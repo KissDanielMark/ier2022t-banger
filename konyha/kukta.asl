@@ -13,13 +13,21 @@ available(etel,fridge).
 			close(fridge);
 			prepare(etel);
 			!at(kukta, szakacs);
-			hand_in(etel);//na itt ezt nem tudom, lehet elokeszitett_kaja kell neki
+			hand_in(etel);
 			?has(szakacs, etel).
 //HA azt a parancsot kaptam szakacstol hog ker elokeszitett kajat
 //viszont nincs nyersanyag akkor
-+!has(szakacs, etel): not available(etel, fridge)
-		<- .send(futar, achieve, get(etel, 5));
-			!at(kukta, fridge).
++!has(szakacs, etel) : not available(etel, fridge)
+				<- .send(futar, achieve, get(etel, 5));
+				   !at(kukta, fridge).
+			
+//+!has(szakacs, etel) :  
+
+-!has(_,_)
+   :  true
+   <- .current_intention(I);
+      .print("Failed to achieve goal '!has(_,_)'. Current intention is: ",I).
+
 
 +!at(kukta, P): at(kukta,P) <- true.
 

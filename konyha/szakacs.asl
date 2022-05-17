@@ -10,9 +10,18 @@
 	
 	
 //ha van szakacsnak elokeszitett_kaja akkor fozzon kajat
-+has(szakacs, etel) : true <- !cook(etel).
-
-
++has(szakacs, etel) : true 
+				<- !cook(etel).
 
 //ha nincs nala elokeszitett kaja szolni a kuktanak
--has(szakacs, etel): true <- !get(etel).
+-has(szakacs, etel) : true 
+				<- !get(etel).
+			
+//amig van nalam kaja suss vagy valami
++!cook(etel) : has(szakacs, etel)
+				<-sip(etel);
+				!cook(etel).
+				
++!cook(etel) : not has(szakacs, etel)
+				<- true.
+				
