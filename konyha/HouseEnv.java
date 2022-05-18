@@ -155,7 +155,7 @@ public class HouseEnv extends Environment {
         {
             updatePercepts();
             try {
-                Thread.sleep(500);
+                Thread.sleep(10000);
             } catch (Exception e) {}
         }
         return result;
