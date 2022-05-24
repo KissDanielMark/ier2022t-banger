@@ -1,5 +1,4 @@
 /* Initial goals */
-
 !get(etel).		//celja az agensnek penzt szerezni
 //!check_tired. // initial goal: verify whether I am getting tired
 
@@ -10,7 +9,8 @@
 	
 +has(szakacs, keszkaja): true
 				<- .send(pincer, achieve, serve(keszkaja)).
-				
+-has(szakacs, keszkaja): true
+				<- true.
 //ha van szakacsnak elokeszitett_kaja akkor fozzon kajat
 +has(szakacs, etel) : true 
 				<- !cook(etel).
@@ -26,4 +26,5 @@
 				
 +!cook(etel) : not has(szakacs, etel)
 				<- elkeszult(keszetel).
-				
+-!cook(etel): true
+	<- true.

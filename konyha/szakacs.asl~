@@ -8,7 +8,9 @@
 +!get(etel) : true 
 	<- .send(kukta, achieve, has(szakacs, etel)).
 	
-	
++has(szakacs, keszkaja): true
+				<- .send(pincer, achieve, serve(keszkaja)).
+				
 //ha van szakacsnak elokeszitett_kaja akkor fozzon kajat
 +has(szakacs, etel) : true 
 				<- !cook(etel).
@@ -23,5 +25,5 @@
 				!cook(etel).
 				
 +!cook(etel) : not has(szakacs, etel)
-				<- true.
+				<- elkeszult(keszetel).
 				

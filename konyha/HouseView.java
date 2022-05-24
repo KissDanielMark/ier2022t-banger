@@ -24,29 +24,32 @@ public class HouseView extends GridWorldView {
         Location lRobot = hmodel.getAgPos(0);
         super.drawAgent(g, x, y, Color.lightGray, -1);
         switch (object) {
-
-
-        case HouseModel.FRIDGE:
-            if (lRobot.equals(hmodel.locationFridge)) {
-                super.drawAgent(g, x, y, Color.yellow, -1);
+            case HouseModel.FRIDGE: {
+                if (lRobot.equals(hmodel.locationFridge)) {
+                    super.drawAgent(g, x, y, Color.yellow, -1);
+                }
+                g.setColor(Color.black);
+                drawString(g, x, y, defaultFont, "Fridge (" + hmodel.availableBeers + ")");
+                break;
             }
-            g.setColor(Color.black);
-            drawString(g, x, y, defaultFont, "Fridge ("+hmodel.availableBeers+")");
-            break;
-
-
-        case HouseModel.OWNER:
-            if (lRobot.equals(hmodel.locationOwner)) {
-                super.drawAgent(g, x, y, Color.yellow, -1);
+            case HouseModel.OWNER:{
+                if (lRobot.equals(hmodel.locationOwner)) {
+                    super.drawAgent(g, x, y, Color.yellow, -1);
+                }
+                String o = "Szakacs";
+                if (hmodel.sipCount > 0) {
+                    o += " (" + hmodel.sipCount + ")";
+                }
+                g.setColor(Color.black);
+                drawString(g, x, y, defaultFont, o);
+                break;
             }
-            String o = "Szakacs";
-            if (hmodel.sipCount > 0) {
-                o +=  " ("+hmodel.sipCount+")";
+            case HouseModel.TABLE:{
+                super.drawAgent(g, x, y, Color.magenta, -1);
+                g.setColor(Color.black);
+                drawString(g,x,y, defaultFont, "Asztal");
+                break;
             }
-            g.setColor(Color.black);
-            drawString(g, x, y, defaultFont, o);
-            break;
-            
         }
     }
 
