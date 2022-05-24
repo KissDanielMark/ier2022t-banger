@@ -14,10 +14,18 @@ public class HouseEnv extends Environment {
     public static final Literal hasSzakacsEtelParancs = Literal.parseLiteral("has(szakacs,etel)");
 
     public static final Literal cookEtelParancs = Literal.parseLiteral("cook(etel)");
+    public static final Literal doneParancs = Literal.parseLiteral("elkeszult(keszetel)");
     public static final Literal prepareEtelParancs = Literal.parseLiteral("prepare(etel)");
 
     public static final Literal atFridgeParancs = Literal.parseLiteral("at(kukta,fridge)");
     public static final Literal ao = Literal.parseLiteral("at(kukta,szakacs)");
+
+    public static final Literal felveszParancs = Literal.parseLiteral("felvesz(keszkaja)");
+    public static final Literal felszolgalParancs = Literal.parseLiteral("felszolgal(keszkaja)");
+    public static final Literal serveParancs = Literal.parseLiteral("serve(keszkaja)");
+    public static final Literal hasSzakacsKeszkajaParancs = Literal.parseLiteral("has(szakacs,keszkaja)");
+    public static final Literal pincerAtSzakacs = Literal.parseLiteral("at(pincer,szakacs)");
+    public static final Literal pincerAtAsztal = Literal.parseLiteral("at(pincer,asztal)");
 
     static Logger logger = Logger.getLogger(HouseEnv.class.getName());
 
@@ -45,6 +53,7 @@ public class HouseEnv extends Environment {
         // clear the percepts openFridgeParancs the agents
         clearPercepts("kukta");
         clearPercepts("szakacs");
+        clearPercepts("pincer");
 
         // get the robot location
         Location locationRobot = model.getAgPos(0);
@@ -57,6 +66,14 @@ public class HouseEnv extends Environment {
             addPercept("kukta", ao);
         }
 
+        Location locationPincer = model.getAgPos(1);
+        if(locationPincer.equals(model.locationOwner)){
+            addPercept("pincer", pincerAtSzakacs);
+        }
+        if(locationPincer.equals(model.locationAsztal)){
+            addPercept("pincer", pincerAtAsztal);
+        }
+
         // add beer "status" the percepts
         if (model.fridgeOpen) {
             addPercept("kukta", Literal.parseLiteral("stock(etel,"+model.availableBeers+")"));
@@ -66,13 +83,17 @@ public class HouseEnv extends Environment {
             addPercept("kukta", hasSzakacsEtelParancs);
             addPercept("szakacs", hasSzakacsEtelParancs);
         }
+        if(model.foodReady){
+            addPercept("pincer", hasSzakacsKeszkajaParancs);
+            addPercept("szakacs", hasSzakacsKeszkajaParancs);
+        }
     }
 
 
     
     @Override
     public boolean executeAction(String ag, Structure action) {
-        System.out.println("\n["+ag+"] doing: "+action+"\n");
+        //System.out.println("\n["+ag+"] doing: "+action+"\n");
         boolean result = false;
         if (action.equals(openFridgeParancs)) 
         { // openFridgeParancs = open(fridge)
@@ -92,10 +113,16 @@ public class HouseEnv extends Environment {
                 dest = model.locationFridge;
             } else if (l.equals("szakacs")) {
                 dest = model.locationOwner;
+            } else if (l.equals("asztal")){
+                dest = model.locationAsztal;
             }
 
             try {
-                result = model.moveTowards(dest);
+                if(ag.equals("pincer")){
+                    result = model.moveTowards(dest, 1);
+                } else {
+                    result = model.moveTowards(dest, 0);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -131,8 +158,7 @@ public class HouseEnv extends Environment {
         {
             System.out.println("Prepare kaja parancs!!!");
             result = model.prepareFood();
-
-        } 
+        }
 
         else if (action.getFunctor().equals("deliver")) 
         {
@@ -144,7 +170,21 @@ public class HouseEnv extends Environment {
                 logger.info("Failed to execute action deliver!"+e);
             }
 
-        } 
+        } else if(action.equals(felveszParancs)){
+            //todo
+            System.out.println("Felvettem yeeee");
+            result = true;
+        } else if(action.equals(felszolgalParancs)){
+            //todo
+            model.foodReady = false;
+            System.out.println("FELSZOLGALTAM AAAAAAAAAAAAAAAAAA");
+            result = true;
+        } else if(action.equals(serveParancs)){
+            System.out.println("SERVEEEEEEEEEEEEEEEEEE");
+            result = true;
+        } else if(action.equals(doneParancs)){
+            model.foodReady = true;
+        }
         else 
         {
             System.out.println("HIBA VOLT!");
@@ -155,7 +195,7 @@ public class HouseEnv extends Environment {
         {
             updatePercepts();
             try {
-                Thread.sleep(10000);
+                Thread.sleep(500);
             } catch (Exception e) {}
         }
         return result;

@@ -1,36 +1,41 @@
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
 
-/** class that implements the Model of Domestic Robot application */
+/** class that implements the Model of0 Domestic Robot application */
 public class HouseModel extends GridWorldModel {
 
     // constants for the grid objects
     public static final int FRIDGE = 16;
     public static final int OWNER  = 32;
+    public static final int TABLE  = 48;
 
     // the grid size
     public static final int palyameret = 7;
 
+    boolean foodReady    = false;
     boolean fridgeOpen   = false; // whether the fridge is open
     boolean carryingBeer = false; // whether the robot is carrying beer
     int sipCount        = 0; // how many sip the owner did
     int availableBeers  = 10; // how many beers are available
 
     Location locationFridge = new Location(0,0);//felso sarok
-    Location locationOwner  = new Location(palyameret-1,palyameret-1);//also sarok
+    Location locationOwner  = new Location(palyameret-1,palyameret-1);//jobb also sarok
+    Location locationAsztal = new Location(0, palyameret-1);//bal also
 
     public HouseModel() {
         
         // create a 7x7 grid with one mobile agent
-        super(palyameret, palyameret, 1);
+        super(palyameret, palyameret, 2);
 
         // initial location of robot (column 3, line 3)
         // ag code 0 means the robot
         setAgPos(0, palyameret/2, palyameret/2);
+        setAgPos(1, palyameret-1, 0);
 
         // initial location of fridge and owner
         add(FRIDGE, locationFridge);
         add(OWNER, locationOwner);
+        add(TABLE, locationAsztal);
 
         System.out.println("HouseModel inicializálás");
     }
@@ -53,13 +58,13 @@ public class HouseModel extends GridWorldModel {
         }
     }
 
-    boolean moveTowards(Location dest) {
-        Location r1 = getAgPos(0);
+    boolean moveTowards(Location dest, int id) {
+        Location r1 = getAgPos(id);
         if (r1.x < dest.x)        r1.x++;
         else if (r1.x > dest.x)   r1.x--;
         if (r1.y < dest.y)        r1.y++;
         else if (r1.y > dest.y)   r1.y--;
-        setAgPos(0, r1); // move the robot in the grid
+        setAgPos(id, r1); // move the robot in the grid
 
         // repaint the fridge and owner locations
         if (view != null) {
@@ -114,13 +119,11 @@ public class HouseModel extends GridWorldModel {
 
     boolean cookFood()
     {
-        System.out.println("Szopj ki buzi - cook");
         return true;
     }
 
     boolean prepareFood()
     {
-        System.out.println("Szopj ki buzi - prepare");
         return true;
     }
 }

@@ -46,21 +46,28 @@ public class HouseView extends GridWorldView {
             g.setColor(Color.black);
             drawString(g, x, y, defaultFont, o);
             break;
-
             
         }
-        repaint();
     }
 
     @Override
     public void drawAgent(Graphics g, int x, int y, Color c, int id) {
-        Location lRobot = hmodel.getAgPos(0);
-        if (!lRobot.equals(hmodel.locationOwner) && !lRobot.equals(hmodel.locationFridge)) {
-            c = Color.yellow;
-            if (hmodel.carryingBeer) c = Color.orange;
+        if(id == 0){
+            Location lRobot = hmodel.getAgPos(0);
+            if (!lRobot.equals(hmodel.locationOwner) && !lRobot.equals(hmodel.locationFridge)) {
+                c = Color.yellow;
+                if (hmodel.carryingBeer) c = Color.orange;
+                super.drawAgent(g, x, y, c, -1);
+                g.setColor(Color.black);
+                super.drawString(g, x, y, defaultFont, "Kukta");
+            }
+        } else if(id == 1){
+            Location lRobot = hmodel.getAgPos(1);
+            c = Color.green;
             super.drawAgent(g, x, y, c, -1);
             g.setColor(Color.black);
-            super.drawString(g, x, y, defaultFont, "Kukta");
+            super.drawString(g, x, y, defaultFont, "Pincer");
         }
+
     }
 }

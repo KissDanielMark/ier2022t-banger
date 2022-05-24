@@ -18,7 +18,7 @@ available(etel,fridge).
 //HA azt a parancsot kaptam szakacstol hog ker elokeszitett kajat
 //viszont nincs nyersanyag akkor
 +!has(szakacs, etel) : not available(etel, fridge)
-				<- .send(futar, achieve, get(etel, 5));
+				<- .send(pincer, achieve, get(etel, 5));
 				   !at(kukta, fridge).
 			
 //+!has(szakacs, etel) :  
