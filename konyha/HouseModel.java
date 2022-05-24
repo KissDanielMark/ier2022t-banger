@@ -10,19 +10,17 @@ public class HouseModel extends GridWorldModel {
     public static final int TABLE  = 8;
     
     // the grid size
-    public static final int palyameret = 8;
-    
-    boolean map[][] = new boolean[palyameret][palyameret];
+    public static final int palyameret = 7;
 
     boolean foodReady    = false;
     boolean fridgeOpen   = false; // whether the fridge is open
     boolean carryingBeer = false; // whether the robot is carrying beer
     int sipCount        = 0; // how many sip the owner did
-    int availableBeers  = 10; // how many beers are available
+    int availableBeers  = 5; // how many beers are available
 
-    Location locationFridge = new Location(1,1);//felso sarok
-    Location locationOwner  = new Location(palyameret-2,palyameret-2);//jobb also sarok
-    Location locationAsztal = new Location(1, palyameret-2);//bal also
+    Location locationFridge = new Location(0,0);//felso sarok
+    Location locationOwner  = new Location(palyameret-1,palyameret-1);//jobb also sarok
+    Location locationAsztal = new Location(0, palyameret-1);//bal also
 
     public HouseModel() {
         
@@ -32,29 +30,12 @@ public class HouseModel extends GridWorldModel {
         // initial location of robot (column 3, line 3)
         // ag code 0 means the robot
         setAgPos(0, palyameret/2, palyameret/2);
-        setAgPos(1, palyameret-2, 0);
+        setAgPos(1, palyameret-1, 0);
 
         // initial location of fridge and owner
         add(FRIDGE, locationFridge);
         add(OWNER, locationOwner);
         add(TABLE, locationAsztal);
-        for(int x = 0; x <= 7; x++){
-            add(OBSTACLE, x, 0);
-            add(OBSTACLE, x, 7);
-            map[x][0] = true;
-            map[x][7] = true;
-        }
-        for(int y = 1; y <= 6; y++){
-            add(OBSTACLE, 0, y);
-            add(OBSTACLE, 7, y);
-            map[0][y] = true;
-            map[7][y] = true;
-        }
-        for(int y = 0; y <= 6; y++){
-            if(y == 4) continue;
-            add(OBSTACLE, 4, y);
-            map[4][y] = true;
-        }
 
         System.out.println("HouseModel inicializálás");
     }
@@ -94,10 +75,10 @@ public class HouseModel extends GridWorldModel {
         return true;
     }
 
-    boolean getBeer() {
+    boolean getBeer(int ft) {
         if (fridgeOpen && availableBeers > 0 && !carryingBeer) 
         {
-            availableBeers--;
+            availableBeers -= ft;
             carryingBeer = true;
             if (view != null)
                 view.update(locationFridge.x,locationFridge.y);

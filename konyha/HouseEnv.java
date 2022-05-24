@@ -2,6 +2,7 @@ import jason.asSyntax.*;
 import jason.environment.Environment;
 import jason.environment.grid.Location;
 import java.util.logging.Logger;
+import java.util.Random;
 
 public class HouseEnv extends Environment {
 
@@ -76,7 +77,7 @@ public class HouseEnv extends Environment {
 
         // add beer "status" the percepts
         if (model.fridgeOpen) {
-            addPercept("kukta", Literal.parseLiteral("stock(etel,"+model.availableBeers+")"));
+            addPercept("kukta", Literal.parseLiteral("stock(etel,"+(model.availableBeers)+")"));
         }
         if (model.sipCount > 0) //(model.sipCount > 0)
         {
@@ -130,9 +131,9 @@ public class HouseEnv extends Environment {
         } 
         else if (action.equals(getEtelParancs)) 
         {
-            System.out.println("ETEL KELL PARANCS FUTAS");
-            result = model.getBeer();
-
+            Random r = new Random();
+            int ft = r.nextInt(3)+1;
+            result = model.getBeer(ft);
         } 
         else if (action.equals(handInEtelParancs)) 
         {
@@ -164,7 +165,7 @@ public class HouseEnv extends Environment {
         {
             // wait 4 seconds to finish "deliver"
             try {
-                Thread.sleep(4000);
+                Thread.sleep(1000);
                 result = model.addBeer( (int)((NumberTerm)action.getTerm(1)).solve());
             } catch (Exception e) {
                 logger.info("Failed to execute action deliver!"+e);
@@ -195,7 +196,7 @@ public class HouseEnv extends Environment {
         {
             updatePercepts();
             try {
-                Thread.sleep(500);
+                Thread.sleep(250);
             } catch (Exception e) {}
         }
         return result;

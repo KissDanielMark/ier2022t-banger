@@ -18,8 +18,9 @@ available(etel,fridge).
 //HA azt a parancsot kaptam szakacstol hog ker elokeszitett kajat
 //viszont nincs nyersanyag akkor
 +!has(szakacs, etel) : not available(etel, fridge)
-				<- .send(pincer, achieve, get(etel, 5));
-				   !at(kukta, fridge).
+				<- .send(supermarket, achieve, order(etel, 5));
+				   open(fridge);
+				   close(fridge).
 			
 //+!has(szakacs, etel) :  
 
@@ -33,13 +34,17 @@ available(etel,fridge).
 
 +!at(kukta,P):not at(kukta, P) <- move_towards(P);
 								!at(kukta,P).
-								
+				
++delivered(etel,_Qtd,_OrderId)[source(supermarket)]
+  :  true
+  <- +available(etel,fridge);
+     !has(szakacs,etel).
 
 // when the fridge is opened, the beer stock is perceived
 // and thus the available belief is updated
-+stock(etel,0)
-   :  available(etel,fridge)
++stock(etel,N)
+   :  N < 3 & available(etel,fridge)
    <- -available(etel,fridge).
 +stock(etel,N)
-   :  N > 0 & not available(etel,fridge)
+   :  N > 3 & not available(etel,fridge)
    <- -+available(etel,fridge).
