@@ -4,12 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class RendeloKiosk extends JFrame {
+    JPanel panel = new JPanel();
+    static JLabel dellaLabel = new JLabel("Della: $0");
     JButton rendelBtn = new JButton("Rendelés");
     JComboBox<String> kajak = new JComboBox(new String[]{"Burger(1)", "Pizza(2)", "Spagetti(3)"});
     JComboBox<String> asztalok = new JComboBox(new String[]{"Asztal1", "Asztal2", "Asztal3"});
 
     public RendeloKiosk(){
-        setLayout(new GridLayout());
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         setSize(400, 400);
         rendelBtn.addActionListener(new ActionListener() {
             @Override
@@ -19,9 +21,15 @@ public class RendeloKiosk extends JFrame {
 //                HouseEnv.currentAsztal = (String) asztalok.getSelectedItem();
             }
         });
-        add(kajak);
-        add(asztalok);
-        add(rendelBtn);
+        panel.add(dellaLabel);
+        panel.add(kajak);
+        panel.add(asztalok);
+        panel.add(rendelBtn);
+        add(panel);
         setVisible(true);
+    }
+
+    static void updateDella(int della){
+        dellaLabel.setText("Della $" + della);
     }
 }

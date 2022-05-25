@@ -1,5 +1,6 @@
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
+import java.util.List;
 
 /** class that implements the Model of0 Domestic Robot application */
 public class HouseModel extends GridWorldModel {
@@ -14,6 +15,9 @@ public class HouseModel extends GridWorldModel {
     // the grid size
     public static final int palyameret = 7;
 
+    int[][] mapKereso = new int[palyameret][palyameret];
+
+    int penz             = 0;
     boolean foodReady    = false;
     boolean fridgeOpen   = false; // whether the fridge is open
     boolean carrying     = false; // whether the robot is carrying beer
@@ -22,9 +26,9 @@ public class HouseModel extends GridWorldModel {
 
     Location locationFridge = new Location(0,0);//felso sarok
     Location locationChef  = new Location(palyameret-1,palyameret-1);//jobb also sarok
-    Location locationAsztal1 = new Location(0, palyameret-1);//bal also
-    Location locationAsztal2 = new Location(0, palyameret-3);//bal also
-    Location locationAsztal3 = new Location(0, palyameret-5);//bal also
+    Location locationAsztal1 = new Location(3, 2);//bal also
+    Location locationAsztal2 = new Location(0, palyameret-3);
+    Location locationAsztal3 = new Location(3, palyameret-1);
 
     public HouseModel() {
         
@@ -42,6 +46,16 @@ public class HouseModel extends GridWorldModel {
         add(TABLE1, locationAsztal1);
         add(TABLE2, locationAsztal2);
         add(TABLE3, locationAsztal3);
+
+        for(int y = 1; y <= 6; y++){
+            if(y == 4) continue;
+            add(OBSTACLE, 4, y);
+            mapKereso[y][4] = 1;
+        }
+        for(int x = 0; x <= 3; x++){
+            add(OBSTACLE, x, 1);
+            mapKereso[1][x] = 1;
+        }
 
         System.out.println("HouseModel inicializálás");
     }
@@ -66,11 +80,21 @@ public class HouseModel extends GridWorldModel {
     }
 
     boolean moveTowards(Location dest, int id) {
+        Finder f = new Finder();
         Location r1 = getAgPos(id);
-            if (r1.x < dest.x)        r1.x++;
-            else if (r1.x > dest.x)   r1.x--;
-            if (r1.y < dest.y)        r1.y++;
-            else if (r1.y > dest.y)   r1.y--;
+
+        Point start = new Point(r1.x, r1.y, null);
+        Point end = new Point(dest.x,dest.y, null);
+
+        List<Point> path = f.FindPath(mapKereso,start,end);
+        if (path != null)
+        {
+            r1.x = path.get(0).x;
+            r1.y = path.get(0).y;
+        }
+        else{
+            System.out.println("No path found");
+        }
         setAgPos(id, r1); // move the robot in the grid
 
         // repaint the fridge and owner locations
@@ -108,7 +132,7 @@ public class HouseModel extends GridWorldModel {
         if (carrying) {
             kavarCount = HouseEnv.currentKaja * 3;
             carrying = false;
-            HouseEnv.currentKaja = 0;
+            //HouseEnv.currentKaja = 0;
             if (view != null)
                 view.update(locationChef.x,locationChef.y);
             return true;

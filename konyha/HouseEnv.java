@@ -189,6 +189,8 @@ public class HouseEnv extends Environment {
             try {
                 Thread.sleep(3000);
                 result = model.addAlapAg( (int)((NumberTerm)action.getTerm(1)).solve());
+                model.penz--;
+                RendeloKiosk.updateDella(model.penz);
             } catch (Exception e) {
                 logger.info("Failed to execute action deliver!"+e);
             }
@@ -199,6 +201,9 @@ public class HouseEnv extends Environment {
             model.foodReady = false;
             currentAsztal = "ures";
             kiszolgalasFolyamatban = false;
+            model.penz += currentKaja;
+            RendeloKiosk.updateDella(model.penz);
+            currentKaja = 0;
             result = true;
         } else if(action.equals(serveParancs)){
             result = true;
