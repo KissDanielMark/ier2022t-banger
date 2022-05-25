@@ -18,6 +18,9 @@ public class HouseModel extends GridWorldModel {
     
     boolean map[][] = new boolean[palyameret][palyameret];
 
+    int[][] mapKereso = new int[palyameret][palyameret];
+        
+
     boolean foodReady    = false;
     boolean fridgeOpen   = false; // whether the fridge is open
     boolean carryingBeer = false; // whether the robot is carrying beer
@@ -47,6 +50,7 @@ public class HouseModel extends GridWorldModel {
             if(y == 4) continue;
             add(OBSTACLE, 4, y);
             map[4][y] = true;
+            mapKereso[y][4] = 1;
         }
 
         System.out.println("HouseModel inicializálás");
@@ -72,64 +76,20 @@ public class HouseModel extends GridWorldModel {
 
     boolean moveTowards(Location dest, int id) {
         Finder f = new Finder();
+        Location r1 = getAgPos(id);
 
+        Point start = new Point(r1.x, r1.y, null);
+        Point end = new Point(dest.x,dest.y, null);
 
-        /*int[][] map = {
-            {0, 0, 0, 0, 0},
-            {0, 0, 1, 0, 1},
-            {1, 0, 0, 1, 1},
-            {0, 0, 0, 1, 0},
-            {1, 1, 0, 0, 1}
-        };
-
-        Point start = new Point(0, 0, null);
-        Point end = new Point(3, 4, null);*/
-        int[][] map = 
+        List<Point> path = f.FindPath(mapKereso,start,end);
+        if (path != null) 
         {
-            {0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 1, 0, 0}
-        };
-
-        Point start = new Point(6, 6, null);
-        Point end = new Point(0, 6, null);
-        
-        List<Point> path = f.FindPath(map,start,end);
-        if (path != null) {
-            for (Point point : path) {
-                System.out.println(point);
-                if(point.x == end.x && point.y == end.y)
-                {
-                    System.out.println("MEGVAN A CEL");
-                }
-            }
+            r1.x = path.get(0).x;
+            r1.y = path.get(0).y;
         }
         else{
             System.out.println("No path found");
         }
-
-
-        Location r1 = getAgPos(id);
-            if (r1.x < dest.x) 
-            {
-                r1.x++;
-            }       
-            else if (r1.x > dest.x)
-            {
-                r1.x--;
-            }   
-            if (r1.y < dest.y) 
-            {
-                r1.y++;
-            }      
-            else if (r1.y > dest.y) 
-            {
-                r1.y--;
-            }  
         setAgPos(id, r1); // move the robot in the grid
 
         // repaint the fridge and owner locations
