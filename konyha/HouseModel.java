@@ -6,21 +6,25 @@ public class HouseModel extends GridWorldModel {
 
     // constants for the grid objects
     public static final int FRIDGE = 16;
-    public static final int OWNER  = 32;
-    public static final int TABLE  = 8;
-    
+    public static final int CHEF  = 32;
+    public static final int TABLE1  = 8;
+    public static final int TABLE2  = 64;
+    public static final int TABLE3  = 128;
+
     // the grid size
     public static final int palyameret = 7;
 
     boolean foodReady    = false;
     boolean fridgeOpen   = false; // whether the fridge is open
-    boolean carryingBeer = false; // whether the robot is carrying beer
-    int sipCount        = 0; // how many sip the owner did
-    int availableBeers  = 5; // how many beers are available
+    boolean carrying     = false; // whether the robot is carrying beer
+    int kavarCount       = 0; // how many sip the owner did
+    int availableIngredient  = 5; // how many beers are available
 
     Location locationFridge = new Location(0,0);//felso sarok
-    Location locationOwner  = new Location(palyameret-1,palyameret-1);//jobb also sarok
-    Location locationAsztal = new Location(0, palyameret-1);//bal also
+    Location locationChef  = new Location(palyameret-1,palyameret-1);//jobb also sarok
+    Location locationAsztal1 = new Location(0, palyameret-1);//bal also
+    Location locationAsztal2 = new Location(0, palyameret-3);//bal also
+    Location locationAsztal3 = new Location(0, palyameret-5);//bal also
 
     public HouseModel() {
         
@@ -34,13 +38,16 @@ public class HouseModel extends GridWorldModel {
 
         // initial location of fridge and owner
         add(FRIDGE, locationFridge);
-        add(OWNER, locationOwner);
-        add(TABLE, locationAsztal);
+        add(CHEF, locationChef);
+        add(TABLE1, locationAsztal1);
+        add(TABLE2, locationAsztal2);
+        add(TABLE3, locationAsztal3);
 
         System.out.println("HouseModel inicializálás");
     }
 
     boolean openFridge() {
+        if(HouseEnv.currentKaja == 0) return false;
         if (!fridgeOpen) {
             fridgeOpen = true;
             return true;
@@ -69,17 +76,19 @@ public class HouseModel extends GridWorldModel {
         // repaint the fridge and owner locations
         if (view != null) {
             view.update(locationFridge.x,locationFridge.y);
-            view.update(locationOwner.x,locationOwner.y);
-            view.update(locationAsztal.x, locationAsztal.y);
+            view.update(locationChef.x,locationChef.y);
+            view.update(locationAsztal1.x, locationAsztal1.y);
+            view.update(locationAsztal2.x, locationAsztal2.y);
+            view.update(locationAsztal3.x, locationAsztal3.y);
         }
         return true;
     }
 
-    boolean getBeer(int ft) {
-        if (fridgeOpen && availableBeers > 0 && !carryingBeer) 
+    boolean getAlapAg(int ft) {
+        if (fridgeOpen && availableIngredient > 0 && !carrying)
         {
-            availableBeers -= ft;
-            carryingBeer = true;
+            availableIngredient -= ft;
+            carrying = true;
             if (view != null)
                 view.update(locationFridge.x,locationFridge.y);
             return true;
@@ -88,30 +97,31 @@ public class HouseModel extends GridWorldModel {
         }
     }
 
-    boolean addBeer(int n) {
-        availableBeers += n;
+    boolean addAlapAg(int n) {
+        availableIngredient += n;
         if (view != null)
             view.update(locationFridge.x,locationFridge.y);
         return true;
     }
 
-    boolean handInBeer() {
-        if (carryingBeer) {
-            sipCount = 5;
-            carryingBeer = false;
+    boolean handInAlapAg() {
+        if (carrying) {
+            kavarCount = HouseEnv.currentKaja * 3;
+            carrying = false;
+            HouseEnv.currentKaja = 0;
             if (view != null)
-                view.update(locationOwner.x,locationOwner.y);
+                view.update(locationChef.x,locationChef.y);
             return true;
         } else {
             return false;
         }
     }
 
-    boolean sipBeer() {
-        if (sipCount > 0) {
-            sipCount--;
+    boolean kavarEtel() {
+        if (kavarCount > 0) {
+            kavarCount--;
             if (view != null)
-                view.update(locationOwner.x,locationOwner.y);
+                view.update(locationChef.x,locationChef.y);
             return true;
         } else {
             return false;
@@ -119,11 +129,6 @@ public class HouseModel extends GridWorldModel {
     }
 
     boolean cookFood()
-    {
-        return true;
-    }
-
-    boolean prepareFood()
     {
         return true;
     }

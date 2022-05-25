@@ -9,5 +9,5 @@
 
 MAS konyha {
 	environment: HouseEnv(gui)
-    agents: szakacs; kukta; pincer;
+    agents: szakacs; kukta; pincer; supermarket;
 }

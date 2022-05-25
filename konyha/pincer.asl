@@ -2,14 +2,16 @@
 !serve(keszkaja).
 
 /* Initial beliefs and rules */
-	
+rendeles(asztal).
+
 +!serve(keszkaja): has(szakacs, keszkaja)
 	<- 	!at(pincer, szakacs);
 	   	felvesz(keszkaja);
-		!at(pincer, asztal);
+		?rendeles(A);
+		!at(pincer, A);
 		felszolgal(keszkaja);
-		!serve(keszkaja).
-
+		!at(pincer, szakacs).
+		
 +!serve(keszkaja): not has(szakacs, keszkaja)
 	<-	!at(pincer, szakacs).
 	
@@ -17,3 +19,5 @@
 
 +!at(pincer,P):not at(pincer, P) <- move_towards(P);
 								!at(pincer,P).
+-!at(pincer, P): true
+	<- true.
