@@ -1,5 +1,9 @@
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 
 /** class that implements the Model of0 Domestic Robot application */
 public class HouseModel extends GridWorldModel {
@@ -10,7 +14,7 @@ public class HouseModel extends GridWorldModel {
     public static final int TABLE  = 8;
     
     // the grid size
-    public static final int palyameret = 8;
+    public static final int palyameret = 7;
     
     boolean map[][] = new boolean[palyameret][palyameret];
 
@@ -20,9 +24,9 @@ public class HouseModel extends GridWorldModel {
     int sipCount        = 0; // how many sip the owner did
     int availableBeers  = 10; // how many beers are available
 
-    Location locationFridge = new Location(1,1);//felso sarok
-    Location locationOwner  = new Location(palyameret-2,palyameret-2);//jobb also sarok
-    Location locationAsztal = new Location(1, palyameret-2);//bal also
+    Location locationFridge = new Location(0,0);//felso sarok
+    Location locationOwner  = new Location(palyameret-1,palyameret-1);//jobb also sarok
+    Location locationAsztal = new Location(0, palyameret-1);//bal also
 
     public HouseModel() {
         
@@ -31,25 +35,14 @@ public class HouseModel extends GridWorldModel {
 
         // initial location of robot (column 3, line 3)
         // ag code 0 means the robot
-        setAgPos(0, palyameret/2, palyameret/2);
-        setAgPos(1, palyameret-2, 0);
+        setAgPos(0, palyameret-1, palyameret/2);
+        setAgPos(1, palyameret-1, 0);
 
         // initial location of fridge and owner
         add(FRIDGE, locationFridge);
         add(OWNER, locationOwner);
         add(TABLE, locationAsztal);
-        for(int x = 0; x <= 7; x++){
-            add(OBSTACLE, x, 0);
-            add(OBSTACLE, x, 7);
-            map[x][0] = true;
-            map[x][7] = true;
-        }
-        for(int y = 1; y <= 6; y++){
-            add(OBSTACLE, 0, y);
-            add(OBSTACLE, 7, y);
-            map[0][y] = true;
-            map[7][y] = true;
-        }
+        
         for(int y = 0; y <= 6; y++){
             if(y == 4) continue;
             add(OBSTACLE, 4, y);
@@ -78,11 +71,65 @@ public class HouseModel extends GridWorldModel {
     }
 
     boolean moveTowards(Location dest, int id) {
+        Finder f = new Finder();
+
+
+        /*int[][] map = {
+            {0, 0, 0, 0, 0},
+            {0, 0, 1, 0, 1},
+            {1, 0, 0, 1, 1},
+            {0, 0, 0, 1, 0},
+            {1, 1, 0, 0, 1}
+        };
+
+        Point start = new Point(0, 0, null);
+        Point end = new Point(3, 4, null);*/
+        int[][] map = 
+        {
+            {0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0},
+            {0, 0, 0, 0, 1, 0, 0}
+        };
+
+        Point start = new Point(6, 6, null);
+        Point end = new Point(0, 6, null);
+        
+        List<Point> path = f.FindPath(map,start,end);
+        if (path != null) {
+            for (Point point : path) {
+                System.out.println(point);
+                if(point.x == end.x && point.y == end.y)
+                {
+                    System.out.println("MEGVAN A CEL");
+                }
+            }
+        }
+        else{
+            System.out.println("No path found");
+        }
+
+
         Location r1 = getAgPos(id);
-            if (r1.x < dest.x)        r1.x++;
-            else if (r1.x > dest.x)   r1.x--;
-            if (r1.y < dest.y)        r1.y++;
-            else if (r1.y > dest.y)   r1.y--;
+            if (r1.x < dest.x) 
+            {
+                r1.x++;
+            }       
+            else if (r1.x > dest.x)
+            {
+                r1.x--;
+            }   
+            if (r1.y < dest.y) 
+            {
+                r1.y++;
+            }      
+            else if (r1.y > dest.y) 
+            {
+                r1.y--;
+            }  
         setAgPos(id, r1); // move the robot in the grid
 
         // repaint the fridge and owner locations
