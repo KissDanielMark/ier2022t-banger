@@ -1,11 +1,14 @@
 import jason.asSyntax.*;
 import jason.environment.Environment;
 import jason.environment.grid.Location;
+
+import java.util.*;
 import java.util.logging.Logger;
-import java.util.Random;
 
 public class HouseEnv extends Environment {
 
+    static boolean kiszolgalasFolyamatban = false;
+    static Queue<Rendeles> rendelesek = new LinkedList<>();
     static String currentAsztal = "ures";
     static int currentKaja = 0;
 
@@ -61,6 +64,17 @@ public class HouseEnv extends Environment {
         clearPercepts("kukta");
         clearPercepts("szakacs");
         clearPercepts("pincer");
+
+        if(currentAsztal.equals("ures")){
+            Rendeles r = rendelesek.poll();
+            if(r != null) {
+                kiszolgalasFolyamatban = true;
+                currentAsztal = r.asztal;
+                currentKaja = r.kaja;
+                System.out.println("Választott kaja: " + currentKaja);
+                System.out.println("Választott asztal: " + currentAsztal);
+            }
+        }
 
         addPercept("pincer", Literal.parseLiteral("rendeles("+ currentAsztal +")"));
 
@@ -180,11 +194,11 @@ public class HouseEnv extends Environment {
             }
 
         } else if(action.equals(felveszParancs)){
-            //todo
             result = true;
         } else if(action.equals(felszolgalParancs)){
             model.foodReady = false;
             currentAsztal = "ures";
+            kiszolgalasFolyamatban = false;
             result = true;
         } else if(action.equals(serveParancs)){
             result = true;
@@ -197,14 +211,10 @@ public class HouseEnv extends Environment {
             System.out.println("HIBA VOLT!");
             logger.info("Failed to execute action "+action);
         }
-
-        if (result) 
-        {
-            updatePercepts();
-            try {
-                Thread.sleep(250);
-            } catch (Exception e) {}
-        }
+        updatePercepts();
+        try {
+            Thread.sleep(250);
+        } catch (Exception e) {}
         return result;
     }
 }

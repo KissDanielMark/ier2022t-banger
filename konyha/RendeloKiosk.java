@@ -5,8 +5,8 @@ import java.awt.event.ActionListener;
 
 public class RendeloKiosk extends JFrame {
     JButton rendelBtn = new JButton("Rendelés");
-    JComboBox<String> kajak = new JComboBox(new String[]{"Burger", "Pizza", "Spagetti"});
-    JComboBox<String> asztalok = new JComboBox(new String[]{"asztal1", "asztal2", "asztal3"});
+    JComboBox<String> kajak = new JComboBox(new String[]{"Burger(1)", "Pizza(2)", "Spagetti(3)"});
+    JComboBox<String> asztalok = new JComboBox(new String[]{"Asztal1", "Asztal2", "Asztal3"});
 
     public RendeloKiosk(){
         setLayout(new GridLayout());
@@ -14,10 +14,9 @@ public class RendeloKiosk extends JFrame {
         rendelBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                HouseEnv.currentKaja = kajak.getSelectedIndex()+1;
-                HouseEnv.currentAsztal = (String) asztalok.getSelectedItem();
-                System.out.println("Választott kaja: " + kajak.getSelectedItem());
-                System.out.println("Választott asztal: "+HouseEnv.currentAsztal);
+                HouseEnv.rendelesek.add(new Rendeles((String) asztalok.getSelectedItem(), kajak.getSelectedIndex()+1));
+//                HouseEnv.currentKaja = kajak.getSelectedIndex()+1;
+//                HouseEnv.currentAsztal = (String) asztalok.getSelectedItem();
             }
         });
         add(kajak);
