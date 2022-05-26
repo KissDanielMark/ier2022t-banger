@@ -60,7 +60,7 @@ public class HouseEnv extends Environment {
                 kiszolgalasFolyamatban = true;
                 currentAsztal = r.asztal;
                 currentKaja = r.kaja;
-                System.out.println("Ezt az etelt valasztottak: " + currentKaja+"a(z) "+currentAsztal+" asztalnál");
+                System.out.println("Ezt az etelt valasztottak: " + currentKaja+" a(z) "+currentAsztal+"-nál/nél!");
             }
         }
 
@@ -166,6 +166,7 @@ public class HouseEnv extends Environment {
                 Thread.sleep(3000);
                 result = model.addAlapAg( (int)((NumberTerm)action.getTerm(1)).solve());
                 model.penz--;
+                System.out.println("Fizetni kell a supermarket arubeszallitonak!: -1$");
                 RendeloKiosk.updateDella(model.penz);
             } catch (Exception e) {
                 logger.info("Failed to execute action deliver!"+e);
@@ -178,6 +179,7 @@ public class HouseEnv extends Environment {
             currentAsztal = "ures";
             kiszolgalasFolyamatban = false;
             model.penz += currentKaja;
+            System.out.println("Kifizettek a rendelest!: +"+currentKaja+"$");
             RendeloKiosk.updateDella(model.penz);
             currentKaja = 0;
             result = true;

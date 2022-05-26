@@ -29,7 +29,7 @@ public class HouseView extends GridWorldView {
                     super.drawAgent(g, x, y, Color.yellow, -1);
                 }
                 g.setColor(Color.black);
-                drawString(g, x, y, defaultFont, "Fridge (" + hmodel.availableIngredient + ")");
+                drawString(g, x, y, defaultFont, "Huto (" + hmodel.availableIngredient + ")");
                 break;
             }
             case HouseModel.CHEF:{

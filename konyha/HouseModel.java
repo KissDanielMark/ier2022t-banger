@@ -14,16 +14,13 @@ public class HouseModel extends GridWorldModel {
 
     // the grid size
     public static final int palyameret = 7;
-
     int[][] mapKereso = new int[palyameret][palyameret];
-
     int penz             = 0;
     boolean foodReady    = false;
     boolean fridgeOpen   = false; // whether the fridge is open
     boolean carrying     = false; // whether the robot is carrying beer
     int kavarCount       = 0; // how many sip the owner did
     int availableIngredient  = 5; // how many beers are available
-
     Location locationFridge = new Location(0,0);//felso sarok
     Location locationChef  = new Location(palyameret-1,palyameret-1);//jobb also sarok
     Location locationAsztal1 = new Location(3, 2);//bal also
@@ -56,8 +53,6 @@ public class HouseModel extends GridWorldModel {
             add(OBSTACLE, x, 1);
             mapKereso[1][x] = 1;
         }
-
-        System.out.println("HouseModel inicializálás");
     }
 
     boolean openFridge() {
@@ -80,13 +75,13 @@ public class HouseModel extends GridWorldModel {
     }
 
     boolean moveTowards(Location dest, int id) {
-        Finder f = new Finder();
+        Utkereso f = new Utkereso();
         Location r1 = getAgPos(id);
 
-        Point start = new Point(r1.x, r1.y, null);
-        Point end = new Point(dest.x,dest.y, null);
+        Pont start = new Pont(r1.x, r1.y, null);
+        Pont end = new Pont(dest.x,dest.y, null);
 
-        List<Point> path = f.FindPath(mapKereso,start,end);
+        List<Pont> path = f.FindPath(mapKereso,start,end);
         if (path != null)
         {
             r1.x = path.get(0).x;
@@ -96,7 +91,6 @@ public class HouseModel extends GridWorldModel {
             System.out.println("No path found");
         }
         setAgPos(id, r1); // move the robot in the grid
-
         // repaint the fridge and owner locations
         if (view != null) {
             view.update(locationFridge.x,locationFridge.y);
@@ -132,7 +126,6 @@ public class HouseModel extends GridWorldModel {
         if (carrying) {
             kavarCount = HouseEnv.currentKaja * 3;
             carrying = false;
-            //HouseEnv.currentKaja = 0;
             if (view != null)
                 view.update(locationChef.x,locationChef.y);
             return true;
@@ -152,8 +145,7 @@ public class HouseModel extends GridWorldModel {
         }
     }
 
-    boolean cookFood()
-    {
+    boolean cookFood(){
         return true;
     }
 }
