@@ -1,33 +1,28 @@
 /* Initial beliefs and rules */
 
-// initially, I believe that there is some etel in the fridge
-available(etel,fridge).
+// initially, I believe that there is some alapanyag in the fridge
+available(alapanyag,fridge).
 
 /* Plans */
 //Ha azt a parancsot kapja hogy legyen a szakacsnak 
 //elokeszitett kajaja & van nyersanyag hutoben
-+!has(szakacs,etel) : available(etel, fridge)
++!has(szakacs,alapanyag) : available(alapanyag, fridge)
 		<-	!at(kukta, fridge);
 			open(fridge);
-			get(etel);
+			get(alapanyag);
 			close(fridge);
-			prepare(etel);
 			!at(kukta, szakacs);
-			hand_in(etel);
-			?has(szakacs, etel).
+			hand_in(alapanyag);
+			?has(szakacs, alapanyag).
 //HA azt a parancsot kaptam szakacstol hog ker elokeszitett kajat
 //viszont nincs nyersanyag akkor
-+!has(szakacs, etel) : not available(etel, fridge)
-				<- .send(supermarket, achieve, order(etel, 5));
-				   open(fridge);
-				   close(fridge).
-			
-//+!has(szakacs, etel) :  
++!has(szakacs, alapanyag) : not available(alapanyag, fridge)
+				<- .send(supermarket, achieve, order(alapanyag, 5));
+				   !at(kukta,fridge). 
 
--!has(_,_)
+-!has(szakacs,alapanyag)
    :  true
-   <- .current_intention(I);
-      .print("Failed to achieve goal '!has(_,_)'. Current intention is: ",I).
+   <- !has(szakacs,alapanyag).
 
 
 +!at(kukta, P): at(kukta,P) <- true.
@@ -35,16 +30,16 @@ available(etel,fridge).
 +!at(kukta,P):not at(kukta, P) <- move_towards(P);
 								!at(kukta,P).
 				
-+delivered(etel,_Qtd,_OrderId)[source(supermarket)]
++delivered(alapanyag,_Qtd,_OrderId)[source(supermarket)]
   :  true
-  <- +available(etel,fridge);
-     !has(szakacs,etel).
+  <- +available(alapanyag,fridge);
+     !has(szakacs,alapanyag).
 
 // when the fridge is opened, the beer stock is perceived
 // and thus the available belief is updated
-+stock(etel,N)
-   :  N < 3 & available(etel,fridge)
-   <- -available(etel,fridge).
-+stock(etel,N)
-   :  N > 3 & not available(etel,fridge)
-   <- -+available(etel,fridge).
++stock(alapanyag,N)
+   :  N < 3 & available(alapanyag,fridge)
+   <- -available(alapanyag,fridge).
++stock(alapanyag,N)
+   :  N > 3 & not available(alapanyag,fridge)
+   <- -+available(alapanyag,fridge).
