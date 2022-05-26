@@ -60,7 +60,7 @@ public class HouseEnv extends Environment {
                 kiszolgalasFolyamatban = true;
                 currentAsztal = r.asztal;
                 currentKaja = r.kaja;
-                System.out.println("Rendelés elékszítése folyamatban!(" + currentKaja+" a(z) "+currentAsztal+"-nál/nél)");
+                System.out.println("Rendelés elkészítése folyamatban!(" + currentKaja+" a(z) "+currentAsztal+"-nál/nél)");
             }
         }
 

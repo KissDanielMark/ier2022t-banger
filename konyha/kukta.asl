@@ -30,7 +30,7 @@ available(alapanyag,fridge).
 +!at(kukta,P):not at(kukta, P) <- move_towards(P);
 								!at(kukta,P).
 				
-+delivered(alapanyag,_Qtd,_OrderId)[source(supermarket)]
++delivered(alapanyag,_Qtd)[source(supermarket)]
   :  true
   <- +available(alapanyag,fridge);
      !has(szakacs,alapanyag).
