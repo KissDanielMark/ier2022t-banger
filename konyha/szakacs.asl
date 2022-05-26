@@ -1,29 +1,26 @@
 /* Initial goals */
-!get(penz).		//celja az agensnek penzt szerezni
 
-//ha penzt akarok szerezni szólni kell a kuktanak, hogy erje el,
-//hogy legyen elokeszitett_kaja
-+!get(penz) : true 
-	<- .send(kukta, achieve, has(szakacs, alapanyag)).
-	
-+has(szakacs, keszkaja): true
-				<- .send(pincer, achieve, serve(keszkaja)).
--has(szakacs, keszkaja): true
-				<- true.
-//ha van szakacsnak elokeszitett_kaja akkor fozzon kajat
-+has(szakacs, alapanyag) : true 
-				<- !cook(etel).
+//celja az agensnek penzt szerezni
+!get(penz).		
 
-//ha nincs nala elokeszitett kaja szolni a kuktanak
--has(szakacs, alapanyag) : true 
-				<- !get(penz).
+//ha penzt akarok szerezni szolni kell a kuktanak, hogy szerezzen alapanyag-ot
++!get(penz) : true <- .send(kukta, achieve, has(szakacs, alapanyag)).
+
+//ha van keszkaja a szakacsnal kuldje el a pincert felszolgalni
++has(szakacs, keszkaja): true <- .send(pincer, achieve, serve(keszkaja)).
+-has(szakacs, keszkaja): true <- true.
+
+//ha van szakacsnak alapanyag-a akkor cook etel
++has(szakacs, alapanyag) : true <- !cook(etel).
+
+//ha nincs nala alapanyag kiindulasi allpotba lepes
+-has(szakacs, alapanyag) : true <- !get(penz).
 			
-//amig van nalam kaja suss vagy valami
+//fozni ha van a szakacsnal alapanyag
 +!cook(etel) : has(szakacs, alapanyag)
 				<- kavar(etel);
 				!cook(etel).
 				
-+!cook(etel) : not has(szakacs, alapanyag)
-				<- elkeszult(keszkaja).
--!cook(etel): true
-	<- true.
++!cook(etel) : not has(szakacs, alapanyag) <- elkeszult(keszkaja).
+
+-!cook(etel): true <- true.
